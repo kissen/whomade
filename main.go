@@ -31,7 +31,7 @@ func parseArgs() callConfig {
 		macs = append(macs, arg)
 	}
 
-	if len(macs) == 0 {
+	if len(macs) == 0 && !printVersion {
 		printHelp = true
 	}
 
