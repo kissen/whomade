@@ -10,12 +10,14 @@ type callConfig struct {
 	macs         []string
 	printHelp    bool
 	printVersion bool
+	updateDB     bool
 }
 
 func parseArgs() callConfig {
 	macs := []string{}
 	printHelp := false
 	printVersion := false
+	updateDB := false
 
 	for _, arg := range os.Args[1:] {
 		if arg == "-v" || arg == "--version" {
@@ -28,10 +30,15 @@ func parseArgs() callConfig {
 			continue
 		}
 
+		if arg == "-u" || arg == "--update-db" {
+			updateDB = true
+			continue
+		}
+
 		macs = append(macs, arg)
 	}
 
-	if len(macs) == 0 && !printVersion {
+	if len(macs) == 0 && !printVersion && !updateDB {
 		printHelp = true
 	}
 
@@ -39,6 +46,7 @@ func parseArgs() callConfig {
 		macs:         macs,
 		printHelp:    printHelp,
 		printVersion: printVersion,
+		updateDB:     updateDB,
 	}
 }
 
@@ -47,19 +55,20 @@ func printHelp() {
 
 	os.Stderr.WriteString(usage)
 	os.Stderr.WriteString("\n")
-	os.Stderr.WriteString("-h --help      print this usage information\n")
-	os.Stderr.WriteString("-v --version   print version information\n")
+	os.Stderr.WriteString("-u --update-db  update the MAC database\n")
+	os.Stderr.WriteString("-h --help       print this usage information\n")
+	os.Stderr.WriteString("-v --version    print version information\n")
 }
 
 func printVersion() {
-	fmt.Println("whomade 0.1")
+	fmt.Println("whomade 0.2")
 }
 
 func handleMac(db oui.OuiDB, arg *string) {
 	entry, err := db.Query(*arg)
 
 	if err != nil {
-		msg := fmt.Sprintf("%s\tnot assigned or invalid'\n", *arg)
+		msg := fmt.Sprintf("%s\tnot assigned or invalid\n", *arg)
 		os.Stderr.WriteString(msg)
 	} else {
 		addr := entry.Prefix
@@ -81,6 +90,11 @@ func main() {
 
 	if conf.printVersion {
 		printVersion()
+		os.Exit(0)
+	}
+
+	if conf.updateDB {
+		updateOuiCache()
 		os.Exit(0)
 	}
 

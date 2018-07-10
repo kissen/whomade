@@ -11,7 +11,7 @@ import (
 func updateOuiCache() {
 	const OUI_URL = "http://standards-oui.ieee.org/oui.txt"
 
-	writelnStderr("building MAC database cache...\n")
+	writelnStderr("building MAC database cache...")
 
 	// Fetch data
 	reply, err := http.Get(OUI_URL)
