@@ -13,6 +13,10 @@ type callConfig struct {
 	updateDB     bool
 }
 
+func (cc *callConfig) isValid() bool {
+	return len(cc.macs) > 0 || cc.printVersion || cc.updateDB
+}
+
 func parseArgs() callConfig {
 	macs := []string{}
 	printHelp := false
@@ -36,10 +40,6 @@ func parseArgs() callConfig {
 		}
 
 		macs = append(macs, arg)
-	}
-
-	if len(macs) == 0 && !printVersion && !updateDB {
-		printHelp = true
 	}
 
 	return callConfig{
@@ -81,6 +81,11 @@ func handleMac(db oui.OuiDB, arg *string) {
 func main() {
 	conf := parseArgs()
 
+	if !conf.isValid() {
+		printHelp()
+		os.Exit(1)
+	}
+
 	// printing help and version
 
 	if conf.printHelp {
@@ -95,7 +100,6 @@ func main() {
 
 	if conf.updateDB {
 		updateOuiCache()
-		os.Exit(0)
 	}
 
 	// actual lookup
