@@ -22,5 +22,5 @@ func getCacheDir() string {
 
 func getLocalOuiPath() string {
 	cache := getCacheDir()
-	return path.Join(cache, "oui.txt")
+	return path.Join(cache, "whomade.cache")
 }
