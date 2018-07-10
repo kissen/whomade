@@ -7,18 +7,9 @@ import (
 	"os"
 )
 
-func ouiExists() bool {
-	_, err := os.Stat(getLocalOuiPath())
-	return err == nil
-}
-
 // Ensure that oui.txt exists at the expected path.
 func updateOuiCache() {
 	const OUI_URL = "http://standards-oui.ieee.org/oui.txt"
-
-	if ouiExists() {
-		return
-	}
 
 	writelnStderr("building MAC database cache...\n")
 
