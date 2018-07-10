@@ -42,7 +42,7 @@ func createDatabase() oui.OuiDB {
 	db, err := oui.OpenStaticFile(getLocalOuiPath())
 
 	if err != nil {
-		// Cache mit not exist or be corrupt, try re-downloading
+		// Cache does not exist or is corrupt, try re-downloading
 		updateOuiCache()
 		db, err = oui.OpenStaticFile(getLocalOuiPath())
 
