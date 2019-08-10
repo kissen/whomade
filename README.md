@@ -7,6 +7,8 @@ who was responsible for manufacturing a (network) device.
 Installation
 ------------
 
+`whois` requires at least Go 1.11.
+
 	$ go get github.com/kissen/whomade
 	$ go install github.com/kissen/whomade
 

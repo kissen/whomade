@@ -5,7 +5,19 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path"
 )
+
+// Return the filepath to the oui file on the local computer
+func getLocalOuiPath() string {
+	cache, err := os.UserCacheDir()
+	if err != nil {
+		writelnStderr("could not determine cache dir")
+		os.Exit(1)
+	}
+
+	return path.Join(cache, "whomade.cache")
+}
 
 // Ensure that oui.txt exists at the expected path.
 func updateOuiCache() {
